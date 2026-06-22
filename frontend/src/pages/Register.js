@@ -1,6 +1,7 @@
 import "../styles/auth.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import API from "../api/axiosInstance";
 
 function Register() {
 const [formData, setFormData] = useState({
@@ -21,6 +22,30 @@ const handleChange = (e) => {
     ...formData,
     [e.target.name]: e.target.value,
   });
+
+};
+const handleSubmit = async (e) => {
+
+  e.preventDefault();
+  console.log(formData);
+  try {
+
+    const { data } = await API.post(
+      "/auth/register",
+      formData
+    );
+
+    console.log(data);
+
+    alert(data.message);
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert(error.message);
+
+  }
 
 };
   return (
@@ -44,18 +69,27 @@ const handleChange = (e) => {
 
       <div className="login-right">
 
-        <form className="auth-form">
+       <form
+        className="auth-form"
+        onSubmit={handleSubmit}
+       >
 
   <h2>Create Account</h2>
 
   <input
-    type="text"
-    placeholder="Enter Name"
+  type="text"
+  name="name"
+  placeholder="Enter Name"
+  value={formData.name}
+  onChange={handleChange}
   />
 
   <input
-    type="email"
-    placeholder="Enter Email"
+  type="email"
+  name="email"
+  placeholder="Enter Email"
+  value={formData.email}
+  onChange={handleChange}
   />
 
   <input
